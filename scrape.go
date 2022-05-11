@@ -1,13 +1,14 @@
 package main
 
 import (
-	"fmt"
 	"encoding/json"
 	"io/ioutil"
+	"time"
 	"github.com/gocolly/colly"
 )
 
 type Data struct {
+	Date string
 	Ticker string
 	CompanyName string
 }
@@ -30,10 +31,12 @@ func main() {
 
 	c.Visit("https://finance.yahoo.com/trending-tickers")
 
-	data := Data{Ticker: tickers[0], CompanyName: companyNames[0]}
-	fmt.Println(data)
+	data := Data{
+		Date: time.Now().Format("01-02-2006"),
+		Ticker: tickers[0], 
+		CompanyName: companyNames[0],
+	}
 
 	jsonData, _ := json.MarshalIndent(data, "", " ")
-
 	_ = ioutil.WriteFile("most-popular-ticker.json", jsonData, 0644)
 }
