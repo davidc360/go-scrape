@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"encoding/json"
 	"io/ioutil"
 	"time"
@@ -31,12 +32,16 @@ func main() {
 
 	c.Visit("https://finance.yahoo.com/trending-tickers")
 
+	date := time.Now().Format("01-02-2006")
 	data := Data{
-		Date: time.Now().Format("01-02-2006"),
+		Date: date,
 		Ticker: tickers[0], 
 		CompanyName: companyNames[0],
 	}
 
+	fmt.Printf("The most popular ticker for %s is $%s, %s\n", date, tickers[0], companyNames[0])
+
 	jsonData, _ := json.MarshalIndent(data, "", " ")
-	_ = ioutil.WriteFile("most-popular-ticker.json", jsonData, 0644)
+	fmt.Println(string(jsonData))
+	_ = ioutil.WriteFile("output.json", jsonData, 0644)
 }
