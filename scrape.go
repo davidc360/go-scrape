@@ -2,8 +2,15 @@ package main
 
 import (
 	"fmt"
+	"encoding/json"
+	"io/ioutil"
 	"github.com/gocolly/colly"
 )
+
+type Data struct {
+	Ticker string
+	CompanyName string
+}
 
 func main() {
 	c := colly.NewCollector()
@@ -23,5 +30,10 @@ func main() {
 
 	c.Visit("https://finance.yahoo.com/trending-tickers")
 
-	fmt.Printf("The most popular ticker is $%s, %s\n", tickers[0], companyNames[0])
+	data := Data{Ticker: tickers[0], CompanyName: companyNames[0]}
+	fmt.Println(data)
+
+	jsonData, _ := json.MarshalIndent(data, "", " ")
+
+	_ = ioutil.WriteFile("most-popular-ticker.json", jsonData, 0644)
 }
